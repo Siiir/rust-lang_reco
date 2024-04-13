@@ -8,13 +8,14 @@ fn main() -> anyhow::Result<()> {
     let app_args = lreco::Args::parse();
     let app_cfg = lreco::Cfg::new(app_args);
 
-    // Recognizer
-    let l_reco = lreco::create().context("Failed to create language recognizer.")?;
-
+    let l_classifier =
+        lreco::create_classifier().context("Failed to create language recognizer.")?;
     // Accuracy measure
     if app_cfg.run_accuracy_measure {
-        todo!()
+        lreco::run_accuracy_measure(&l_classifier)?;
     }
+    // The recognizer
+    let l_reco = lreco::from_classifier(l_classifier)?;
 
     // User input.
     let mut buf_reader = BufReader::new(app_cfg.input_reader().unwrap());

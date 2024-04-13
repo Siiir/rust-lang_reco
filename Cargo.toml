@@ -15,6 +15,7 @@ derive_more = "0.99.17"
 elsa = "1.10.0"
 nalgebra = "0.32.5"
 num-rational = "0.4.1"
+num-traits = "0.2.18"
 perc_ic = { git = "https://github.com/Siiir/rust-perceptron"}
 rand = "0.8.5"
 thiserror = "1.0.58"
@@ -27,3 +28,13 @@ strip = "none"
 lto = false
 codegen-units = 256
 incremental = true
+
+[profile.f_release]
+inherits = "release"
+opt-level = 3
+debug = false
+strip = "none"
+lto = true
+codegen-units = 1
+incremental = false
+panic = "abort"

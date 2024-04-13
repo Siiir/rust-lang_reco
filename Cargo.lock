@@ -312,6 +312,7 @@ dependencies = [
  "elsa",
  "nalgebra",
  "num-rational",
+ "num-traits",
  "perc_ic",
  "rand",
  "thiserror",
