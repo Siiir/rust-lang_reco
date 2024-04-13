@@ -1,0 +1,17 @@
+Saros cycle series 117 for solar eclipses occurs at the Moon's ascending node, repeating every 18 years, 11 days, containing 71 events. The first eclipse in this series was on June 24, 792 AD. The final eclipse in this series will be on August 3, 2054. All eclipses in this series occurs at the Moon's ascending node.
+This solar saros is linked to Lunar Saros 110.
+
+
+Umbral eclipses
+Umbral eclipses (annular, total and hybrid) can be further classified as either: 1) Central (two limits), 2) Central (one limit) or 3) Non-Central (one limit). The statistical distribution of these classes in Saros series 117 appears in the following table.
+
+
+Events
+
+
+References
+http://eclipse.gsfc.nasa.gov/SEsaros/SEsaros117.html
+
+
+External links
+Saros cycle 117 - Information and visualization

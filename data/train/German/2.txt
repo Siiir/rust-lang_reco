@@ -1,0 +1,5 @@
+DASP steht für:
+
+Deutsche Gesellschaft für afrikanische Staaten portugiesischer Sprache
+Disk Anti Shock Protection, Schutz von Festplatten vor mechanischer Beschädigung, meist in Laptops
+Drive Active / Slave Present, ein Signal in einer IDE-Schnittstelle, dass die Präsenz eines zweiten Laufwerks kommuniziert

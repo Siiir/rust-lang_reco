@@ -1,0 +1,29 @@
+Ophcrack is a free open-source (GPL licensed) program that cracks Windows log-in passwords by using LM hashes through rainbow tables. The program includes the ability to import the hashes from a variety of formats, including dumping directly from the SAM files of Windows, and can be ran via the command line or using the program’s GUI (Graphical user interface). On most computers, ophcrack can crack most passwords within a few minutes.Rainbow tables for LM hashes are provided for free by the developers. By default, ophcrack is bundled with tables that allow it to crack passwords no longer than 14 characters using only alphanumeric characters. Available for free download are four Windows XP tables and four Windows Vista tables.Objectif Sécurité has even larger tables for purchase that are intended for professional use. Larger rainbow tables are NTLM hash for cracking Windows Vista/Windows 7.Ophcrack is also available as Live CD distributions, which automates the retrieval, decryption, and cracking of passwords from a Windows system. One Live CD distribution is available for Windows XP and lower and another for Windows Vista and Windows 7. The Live CD distributions of ophcrack are built with SliTaz GNU/Linux.
+Starting with version 2.3, Ophcrack also cracks NTLM hashes.  This is necessary if the generation of the LM hash is disabled (this is default for Windows Vista) or if the password is longer than 14 characters (in which case the LM hash is not stored).
+Starting with version 3.7.0, the source code has been moved from SourceForge to GitLab.
+
+
+See also
+Aircrack-ng
+Cain and Abel
+Crack
+DaveGrohl
+Hashcat
+John the Ripper
+L0phtCrack
+NMap
+RainbowCrack
+
+
+References
+
+
+External links
+ Media related to Ophcrack at Wikimedia Commons
+ Cracking Windows XP Passwords at Wikibooks
+Official website
+Ophcrack Online Demo - form to submit hashes and instantly crack passwords
+Ophcrack no table found - how to fix if Ophcrack says "no tables found".
+Ophcrack LiveCD 2 Tutorial Archived 2016-03-04 at the Wayback Machine
+Quick fix if Ophcrack doesn't work
+OPHCRACK (the time-memory-trade-off-cracker) - École Polytechnique Fédérale de Lausanne

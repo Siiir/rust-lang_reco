@@ -1,0 +1,29 @@
+Frontostriatal circuits are neural pathways that connect frontal lobe regions with the striatum and mediate motor, cognitive, and behavioural functions within the brain. They receive inputs from dopaminergic, serotonergic, noradrenergic, and cholinergic cell groups that modulate information processing. Frontostriatal circuits are part of the executive functions. Executive functions include the following: selection and perception of important information, manipulation of information in working memory, planning and organization, behavioral control, adaptation to changes, and decision making.  These circuits are involved in neurodegenerative disorders such as Alzheimer's disease and Parkinson's disease as well as neuropsychiatric disorders including schizophrenia, depression, obsessive compulsive disorder (OCD), and in neurodevelopmental disorder such as attention-deficit hyperactivity disorder (ADHD).
+
+
+Anatomy
+There are five defined frontostriatal circuits: motor and oculomotor circuits originating in the frontal eye fields are involved in motor functions; while dorsolateral prefrontal, orbital frontal, and anterior cingulate circuits are involved in executive functions, social behavior and motivational states. These five circuits share same anatomical structures. These circuits originate in prefrontal cortex and project to the striatum followed by globus pallidus and substantia nigra and finally to the thalamus. There are also feedback loops from thalamus back to prefrontal cortex completing the closed loop circuits. Also, there are open connections to these circuits integrating information from other areas of the brain.
+
+
+Function
+The role of frontostriatal circuits is not well understood. Two of the common theories are action selection and reinforcement learning. The action selection hypothesis suggest that frontalcortex generates possible actions and the striatum selects one of these actions by inhibiting the execution of other actions while allowing the selected action execution. Whereas, the reinforcement learning hypothesis suggest that prediction errors are used to update future reward expectations for selected actions and this guides the selection of actions based on reward expectations.The ventromedial prefrontal cortex and its connections to ventral striatum and amygdala are important in affective-emotional processing. They are responsible for elaboration of the plan of actions responsible for goal-directed behavior. In the eye movement circuitry, prefrontal cortex and anterior cingulate cortex provide the cognitive control of attention and eye movements, while striatum and brainstem initiate the eye movements.  Reduced recruitment of prefrontal cortex while relatively intact brainstem functions during task performance contributes to deficits in the voluntary control of saccades in individuals with autism.It was found that self-esteem is related to the connectivity of frontostriatal circuits, suggesting that feelings of self-worth may emerge from neural systems which integrate information about the self with positive affect and reward.
+
+
+Dorsolateral prefrontal circuit
+This circuit is important in executive functions including complex problem solving, learning new information, planning ahead, recalling remote memories, responding with appropriate behavior, and chronological ordering of events.
+
+
+Orbital frontal circuit
+This circuit connects the frontal monitoring systems to the limbic system.  Dysfunction of this circuit often results in personality change including behavioral disinhibition, emotional lability, aggressive outbursts, poor judgment, and lack of interpersonal sensitivity.
+
+
+Anterior cingulate circuit
+This circuit mediates motivated behavior, response selection, error detection, performance and competition monitoring, working memory, and novelty detection.  Dysfunction in this circuit leads to decreased motivation including prominent apathy, indifference to pain, thirst or hunger, lack of spontaneous movements, and verbalization.
+
+
+References
+
+
+External links
+https://www.ncbi.nlm.nih.gov/books/NBK11154/ Neuroscience - NCBI bookshelf
+http://www.frontiersin.org/Neural_Circuits Frontier specialty journal

@@ -4,12 +4,15 @@ import random
 from bs4 import BeautifulSoup
 from pathlib import Path
 
-def create_directories(base_path, languages, types=('train', 'test'), counts={'train': 5, 'test': 2}):
+default_counts={'train': 50, 'test': 5}
+
+def create_directories(base_path, languages, types=('train', 'test'), counts=default_counts):
     for t in types:
         for lang in languages:
             dir_path = Path(base_path) / t / lang
             dir_path.mkdir(parents=True, exist_ok=True)
             fill_directory(dir_path, counts[t], lang)
+
 
 def fill_directory(directory, count, language):
     texts = fetch_texts(language, count)
