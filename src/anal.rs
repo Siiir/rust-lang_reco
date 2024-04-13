@@ -1,13 +1,17 @@
 use std::io::BufRead;
 
+use anyhow::Context;
+
 /// Counts codepoints read from reader.
-pub fn count_codepoints<R: BufRead>(buf_in_reader: R) -> crate::CpCounter {
+pub fn count_codepoints<R: BufRead>(buf_in_reader: R) -> anyhow::Result<crate::CpCounter> {
     let mut counter = [0; crate::CP_KINDS_COUNT];
-    for byte in buf_in_reader.bytes() {
-        let counter_idx: usize = byte.unwrap().into();
+    for (idx, codepoint) in buf_in_reader.bytes().enumerate() {
+        let counter_idx: usize = codepoint
+            .with_context(|| format!("Failed to read byte with index = {idx}."))?
+            .into();
         counter[counter_idx] += 1;
     }
-    counter
+    Ok(counter)
 }
 
 /// Trains neural network.

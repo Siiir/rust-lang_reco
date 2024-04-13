@@ -19,11 +19,16 @@ pub fn read<P: AsRef<Path>>(path_to_data: P) -> anyhow::Result<(LangSet, Vec<Tex
             for should_be_lang_dir in std::fs::read_dir(path_to_data)? {
                 let should_be_lang_dir =
                     should_be_lang_dir.context("Failed to read next directory entry.")?;
-                if !should_be_lang_dir.file_type().unwrap().is_dir() {
-                    // Ignore invalid entry for simplicity.
-                    continue;
+                // Read only valid dirs while ignoring every other dir entry for simplicity.
+                if let Ok(file_type) = should_be_lang_dir.file_type() {
+                    if file_type.is_dir() {
+                        read_choosen_lang_samples(
+                            should_be_lang_dir,
+                            &lang_set,
+                            &mut text_describtors,
+                        )?;
+                    }
                 }
-                read_choosen_lang_samples(should_be_lang_dir, &lang_set, &mut text_describtors);
             }
 
             // Adapt text descriptors to current NN impl.
@@ -33,7 +38,7 @@ pub fn read<P: AsRef<Path>>(path_to_data: P) -> anyhow::Result<(LangSet, Vec<Tex
         })();
         res = res.with_context(|| {
             format!(
-                "Failed to read data (nat. lang. samples) from \"{:}\".",
+                "Failed to read/interpret data (nat. lang. samples) from \"{:}\".",
                 path_to_data.display()
             )
         });
@@ -57,28 +62,60 @@ fn read_choosen_lang_samples(
                 "Failed to translate the name of directory entry to a name of natural language."
             )
         })?;
+    use crate::SUPPORTED_LANG_COUNT;
+    let lang_id = lang_set
+            .push_lang_name(lang_name.into())
+            .map_err(|_set_is_full| {
+                anyhow::anyhow!(
+                    "App was compiled with support enable for up to {SUPPORTED_LANG_COUNT} but more `language entries` have been found. Help: remove `directory entry` \"{lang_dir_path}\" or another. Note: Different app distributions might have different capacity.",
+                    lang_dir_path = lang_dir_path.display(),
+                )
+            })?;
+
     let mut res = (|| {
-        let lang_id = lang_set.push_lang_name(lang_name.into()).unwrap();
-
-        for lang_text_file in std::fs::read_dir(lang_dir_path).unwrap() {
-            let lang_text_file = lang_text_file.unwrap();
-            if !lang_text_file.file_type().unwrap().is_file() {
-                continue;
+        for lang_text_file in std::fs::read_dir(&lang_dir_path)? {
+            let lang_text_file = lang_text_file.context("Failed to read next directory entry.")?;
+            // Read only valid files while ignoring every other dir entry for simplicity.
+            if let Ok(file_type) = lang_text_file.file_type() {
+                if file_type.is_file() {
+                    read_lang_sample(lang_text_file, lang_id, text_describtors)?;
+                }
             }
-
-            let cp_counter = crate::anal::count_codepoints(std::io::BufReader::new(
-                std::fs::File::open(lang_text_file.path()).unwrap(),
-            ));
-
-            let text_descr = TextDescr {
-                lang_id,
-                cp_counter,
-            };
-
-            text_describtors.push(text_descr);
         }
         Ok(())
     })();
-    res = res;
+    res = res.with_context(|| {
+        format!(
+            "Failed to read/interpret samples of \"{lang_name}\" language from {path}\".",
+            path = lang_dir_path.display()
+        )
+    });
     res
+}
+
+fn read_lang_sample(
+    lang_text_file: std::fs::DirEntry,
+    lang_id: usize,
+    text_describtors: &mut Vec<TextDescr>,
+) -> anyhow::Result<()> {
+    let lang_text_path = lang_text_file.path();
+    let cp_counter = (|| {
+        crate::anal::count_codepoints(std::io::BufReader::new(std::fs::File::open(
+            lang_text_path,
+        )?))
+    })()
+    .with_context(|| {
+        format!(
+            "Failed to read (lang-text sample) file \"{path}\".",
+            path = lang_text_path.display()
+        )
+    })?;
+    let text_descr = TextDescr {
+        lang_id,
+        cp_counter,
+    };
+
+    text_describtors.push(text_descr);
+
+    Ok(())
 }
