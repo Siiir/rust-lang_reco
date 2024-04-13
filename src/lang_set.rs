@@ -71,7 +71,9 @@ impl LangSet {
         self.ensure_id_exists(id)?;
         let mut bs: crate::BitSeq = 1;
         bs = bs
-            .checked_shl(id.try_into().unwrap())
+            .checked_shl(id.try_into().unwrap_or_else(|_| {
+                unimplemented!("This case is to unlikely to be worth implementing.")
+            }))
             .expect("`id` exists ==> `id` < `Self::MAX_LEN` <= `BitSeq::BITS`");
         Ok(bs)
     }

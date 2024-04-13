@@ -1,6 +1,6 @@
 [package]
 name = "lang_reco"
-version = "0.1.0"
+version = "1.0-alpha"
 edition = "2021"
 description = "App for guessing language of the provided text."
 license = "MIT"

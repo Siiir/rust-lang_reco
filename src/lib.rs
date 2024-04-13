@@ -1,5 +1,6 @@
 use std::io::BufRead;
 
+use anyhow::Context;
 pub use args::Args;
 pub mod args;
 pub use cfg::Cfg;
@@ -25,8 +26,8 @@ pub mod ty {
         impl<T> LClassifier for T where T: Fn(&crate::CpCounterFVec) -> Vec<crate::LangName> {}
     }
 
-    pub trait LReco: Fn(&mut dyn BufRead) -> Vec<crate::LangName> {}
-    impl<T> LReco for T where T: Fn(&mut dyn BufRead) -> Vec<crate::LangName> {}
+    pub trait LReco: Fn(&mut dyn BufRead) -> anyhow::Result<Vec<crate::LangName>> {}
+    impl<T> LReco for T where T: Fn(&mut dyn BufRead) -> anyhow::Result<Vec<crate::LangName>> {}
 }
 
 pub const SUPPORTED_LANG_COUNT_U8: u8 = 4;
@@ -55,30 +56,35 @@ macro_rules! exe_doc {
 
 /// Creates the language recognizer.
 pub fn create() -> anyhow::Result<impl crate::LReco> {
-    let classifier = create_classifier()?;
-    from_classifier(classifier)
+    let classifier = create_classifier().context("Failed to create language recognizer.")?;
+    Ok(from_classifier(classifier))
 }
-pub fn from_classifier(classifier: impl crate::LClassifier) -> anyhow::Result<impl crate::LReco> {
-    Ok(move |buf_reader: &mut dyn BufRead| {
+pub fn from_classifier(classify: impl crate::LClassifier) -> impl crate::LReco {
+    move |buf_reader: &mut dyn BufRead| {
         let counter: CpCounterFVec = anal::count_codepoints(buf_reader)
+            .context("Language recognizer couldn't analyzer the input.")?
             .map(|i| i as crate::CpCountFloat)
             .into();
-        classifier(&counter)
-    })
+        Ok(classify(&counter))
+    }
 }
 /// Creates the raw language recognizer that operates .
 pub fn create_classifier() -> anyhow::Result<impl crate::LClassifier> {
-    // Building neural network and lang. set.
-    let mut nn = perc_ic::OneLayerNN::default();
-    let (lang_set, text_describtors): (LangSet, Vec<TextDescrFBased>) =
-        data::read(PATH_TO_TRAIN_DATA)?;
-    anal::train_nn(&mut nn, &lang_set, text_describtors);
-    Ok(
-        move |cp_counter: &crate::CpCounterFVec| -> Vec<crate::LangName> {
-            let lang_codes: BitSeq = nn.decide_for(cp_counter);
-            lang_set.decode(lang_codes)
-        },
-    )
+    let mut res = (|| {
+        // Building neural network and lang. set.
+        let mut nn = perc_ic::OneLayerNN::default();
+        let (lang_set, text_describtors): (LangSet, Vec<TextDescrFBased>) =
+            data::read(PATH_TO_TRAIN_DATA)?;
+        anal::train_nn(&mut nn, &lang_set, text_describtors);
+        Ok(
+            move |cp_counter: &crate::CpCounterFVec| -> Vec<crate::LangName> {
+                let lang_codes: BitSeq = nn.decide_for(cp_counter);
+                lang_set.decode(lang_codes)
+            },
+        )
+    })();
+    res = res.context("Failed to create a language classifier.");
+    res
 }
 
 pub fn run_accuracy_measure(lang_reco: impl crate::LClassifier) -> anyhow::Result<()> {

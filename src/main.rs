@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
     let l_reco = lreco::from_classifier(l_classifier)?;
 
     // User input.
-    let mut buf_reader = BufReader::new(app_cfg.input_reader().unwrap());
+    let mut buf_reader = BufReader::new(app_cfg.input_reader()?);
     // App output
     let pred_langs = l_reco(&mut buf_reader);
     dbg!(pred_langs);

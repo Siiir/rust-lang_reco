@@ -38,7 +38,7 @@ pub fn read<P: AsRef<Path>>(path_to_data: P) -> anyhow::Result<(LangSet, Vec<Tex
         })();
         res = res.with_context(|| {
             format!(
-                "Failed to read/interpret data (nat. lang. samples) from \"{:}\".",
+                "Failed to read/interpret data (language samples) from \"{:}\".",
                 path_to_data.display()
             )
         });
