@@ -1,10 +1,10 @@
-
 [package]
 name = "lang_reco"
 version = "1.0.0"
 edition = "2021"
 description = "App for guessing language of the provided text."
 license = "MIT"
+repository = "https://github.com/Siiir/rust-lang_reco"
 
 [lib]
 name = "lreco"
