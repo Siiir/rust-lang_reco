@@ -27,7 +27,7 @@ You can use `lang_reco` by either specifying a file path or providing input via 
 
 ### Command Line Options
 
-- `-A, --no-accuracy-measure`: Disables measure of the classifier's accuracy using test data. This operation might take additional time if is enabled.
+- `-A, --no-accuracy-measure`: Disables measuring of the classifier's accuracy using test data. Measure takes additional time if is not disabled.
 - `-h, --help`: Prints help information. Use `--help` for more detailed command usage.
 - `-V, --version`: Prints the version information of `lang_reco`.
 
