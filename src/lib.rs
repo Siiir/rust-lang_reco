@@ -1,40 +1,31 @@
 use std::io::BufRead;
 
 use anyhow::Context;
+
 pub use args::Args;
 pub mod args;
 pub use cfg::Cfg;
 pub mod cfg;
 pub use lang_set::{LangName, LangSet};
 pub mod lang_set;
-use num_rational::Ratio;
 pub use text_descr::{float::TextDescrFBased, TextDescr};
 pub mod anal;
 pub mod data;
 pub mod text_descr;
+pub use ty::{raw::LClassifier, LReco};
+pub mod ty;
 pub use paths::*;
 pub mod paths {
     pub const PATH_TO_TRAIN_DATA: &str = "./data/train";
     pub const PATH_TO_TEST_DATA: &str = "./data/test";
 }
-pub use ty::{raw::LClassifier, LReco};
-pub mod ty {
-    use std::io::BufRead;
-
-    pub mod raw {
-        pub trait LClassifier: Fn(&crate::CpCounterFVec) -> Vec<crate::LangName> {}
-        impl<T> LClassifier for T where T: Fn(&crate::CpCounterFVec) -> Vec<crate::LangName> {}
-    }
-
-    pub trait LReco: Fn(&mut dyn BufRead) -> anyhow::Result<Vec<crate::LangName>> {}
-    impl<T> LReco for T where T: Fn(&mut dyn BufRead) -> anyhow::Result<Vec<crate::LangName>> {}
-}
 
 pub const SUPPORTED_LANG_COUNT_U8: u8 = 4;
 pub const SUPPORTED_LANG_COUNT: usize = SUPPORTED_LANG_COUNT_U8 as usize;
-pub const CP_KINDS_COUNT: usize = 255;
+pub const CP_KINDS_COUNT: usize = (b'z' - b'a' + 1) as usize;
 
 pub type BitSeq = usize;
+pub type CodePoint = u8;
 pub type CpCount = usize;
 pub type CpCountFloat = perc_ic::perceptron::PerFloat;
 pub type CpCounter = [CpCount; CP_KINDS_COUNT];
@@ -50,7 +41,15 @@ macro_rules! exe_doc {
         You can provide some UTF-8 through stdin \
          or by giving path to a text file as the first argument.\n\
         The language recognizer should tell you what language \
-         it thinks your text is written in."
+         it thinks your text is written in.\n\
+        \n\
+        Example usage from bash (for executable named \"lang_reco\"):\n\
+        * `echo hahaha | lang_reco -A`\n\
+        * `lang_reco <<< ''`\n\
+        * `lang_reco`\n\
+        * `lang_reco -A ./data/test/Polish/1.txt`\n\
+        * `cat ./data/test/English/1.txt | lang_reco -A`\n\
+        "
     };
 }
 
@@ -62,7 +61,7 @@ pub fn create() -> anyhow::Result<impl crate::LReco> {
 pub fn from_classifier(classify: impl crate::LClassifier) -> impl crate::LReco {
     move |buf_reader: &mut dyn BufRead| {
         let counter: CpCounterFVec = anal::count_codepoints(buf_reader)
-            .context("Language recognizer couldn't analyzer the input.")?
+            .context("Language recognizer couldn't analyze the input.")?
             .map(|i| i as crate::CpCountFloat)
             .into();
         Ok(classify(&counter))
@@ -87,35 +86,14 @@ pub fn create_classifier() -> anyhow::Result<impl crate::LClassifier> {
     res
 }
 
-pub fn run_accuracy_measure(lang_reco: impl crate::LClassifier) -> anyhow::Result<()> {
-    let measure = measure_accuracy(lang_reco)?;
-    dbg!(measure);
-    Ok(())
-}
-fn measure_accuracy(lang_classifier: impl crate::LClassifier) -> anyhow::Result<Ratio<usize>> {
-    // Reading data
-    let (lang_set, text_descrs) = data::read(PATH_TO_TEST_DATA)?;
-
-    // Counting good, bad
-    let count = text_descrs.len();
-    assert_ne!(count, 0);
-    let mut sum: Ratio<_> = num_traits::zero();
-    for TextDescrFBased {
-        lang_id,
-        cp_counter,
-    } in text_descrs
-    {
-        let expected_lang_name = lang_set.id_to_name(lang_id).expect(
-            "Lang. id was created with corresponding lang. set. Thus it should be compatile.",
-        );
-        let prediction = lang_classifier(&cp_counter);
-        if prediction
-            .iter()
-            .any(|pred_lang_name| **pred_lang_name == *expected_lang_name)
-        {
-            sum += Ratio::new(1, prediction.len());
-        }
+pub fn opt_run_accuracy_measure(
+    app_cfg: &crate::Cfg,
+    lang_reco: impl crate::LClassifier,
+) -> anyhow::Result<()> {
+    if app_cfg.accuracy_measure() {
+        let measure = anal::measure_accuracy(lang_reco)
+            .context("Optional accuracy measure failed. Run app with '-A' to disable it.")?;
+        eprintln!("Language recognizer accuracy is {measure}.\nMeasured for sample texts in \"{PATH_TO_TEST_DATA}\".\n")
     }
-
-    Ok(sum / count)
+    Ok(())
 }

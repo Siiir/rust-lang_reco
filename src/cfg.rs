@@ -8,6 +8,17 @@ pub struct Cfg {
     args: crate::Args,
 }
 impl Cfg {
+    // CRUD-R: Getters
+
+    pub fn accuracy_measure(&self) -> bool {
+        !self.no_accuracy_measure
+    }
+
+    // CRUD-R: Properties.
+    pub fn is_input_stdin(&self) -> bool {
+        self.args.input_f_path.is_none()
+    }
+
     pub fn input_reader(&self) -> anyhow::Result<Box<dyn Read>> {
         match self.args.input_f_path {
             None => Ok(Box::new(std::io::stdin().lock())),

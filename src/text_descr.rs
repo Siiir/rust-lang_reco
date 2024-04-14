@@ -18,6 +18,7 @@ pub mod float {
 
     use super::TextDescr;
 
+    #[derive(Debug)]
     pub struct TextDescrFBased {
         pub lang_id: usize,
         pub cp_counter: crate::CpCounterFVec,

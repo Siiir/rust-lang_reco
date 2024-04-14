@@ -2,11 +2,11 @@ pub mod err {
     pub struct NotADir;
 }
 
-use std::{ops::ControlFlow, path::Path};
+use std::path::Path;
 
-use anyhow::{Context, Result};
+use anyhow::Context;
 
-use crate::{LangSet, TextDescr, TextDescrFBased, PATH_TO_TRAIN_DATA};
+use crate::{LangSet, TextDescr, TextDescrFBased};
 
 /// Reads and analyzer the data in [`crate::PATH_TO_DATA`].
 pub fn read<P: AsRef<Path>>(path_to_data: P) -> anyhow::Result<(LangSet, Vec<TextDescrFBased>)> {
@@ -101,7 +101,7 @@ fn read_lang_sample(
     let lang_text_path = lang_text_file.path();
     let cp_counter = (|| {
         crate::anal::count_codepoints(std::io::BufReader::new(std::fs::File::open(
-            lang_text_path,
+            &lang_text_path,
         )?))
     })()
     .with_context(|| {
