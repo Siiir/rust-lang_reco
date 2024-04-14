@@ -27,23 +27,23 @@ You can use `lang_reco` by either specifying a file path or providing input via 
 
 ### Command Line Options
 
-- `-A, --no-accuracy-measure`: Measures the classifier's accuracy using test data. This operation might take additional time.
+- `-A, --no-accuracy-measure`: Disables measure of the classifier's accuracy using test data. This operation might take additional time if is enabled.
 - `-h, --help`: Prints help information. Use `--help` for more detailed command usage.
 - `-V, --version`: Prints the version information of `lang_reco`.
 
 ### Examples
 
-1. Read from a file and measure accuracy:
+1. Read from a file (accuracy measure ON):
    ```bash
-   lang_reco -A ./data/test/Polish/1.txt
+   lang_reco ./data/test/Polish/1.txt
    ```
 
-2. Read from stdin:
+2. Read from stdin (accuracy measure OFF):
    ```bash
-   echo "This is a test." | lang_reco
+   echo "This is a test." | lang_reco -A
    ```
 
-3. Read from stdin with accuracy measurement:
+3. Read from stdin (accuracy measure OFF):
    ```bash
    cat ./data/test/English/1.txt | lang_reco -A
    ```
