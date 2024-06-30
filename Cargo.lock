@@ -459,7 +459,7 @@ checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 [[package]]
 name = "perc_ic"
 version = "1.1.1"
-source = "git+https://github.com/Siiir/rust-perceptron#4b7a28e1ec4e217f5ba78fd48781c6a86d138332"
+source = "git+https://github.com/Siiir/rust-NN-1_layer#117443b38e736f2f1d1fe9ab6ec21b4031781087"
 dependencies = [
  "anyhow",
  "cfg-if",
